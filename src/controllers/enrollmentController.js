@@ -1,19 +1,31 @@
 const BadRequest = require('../errors/BadRequest')
 const enrollmentRepository = require('../repositories/enrollmentRepository')
 
+async function findAll(req, res, next) {
+  try {
+    console.debug(`enrollmentController findAll`)
+    const resp = await enrollmentRepository.findAll()
+    console.debug(`enrollmentController findAll response`, resp)
+    res.json(resp);
+  } catch(e) {
+    console.error(`enrollmentController findAll error`, e)
+    next(e)
+  }
+}
+
 async function create(req, res, next) {
   try {
     console.debug(`enrollmentController create`, req.body)
-    const { student_id, career_id } = {...req.body}
+    const { studentId, careerId } = {...req.body}
 
-    if (!student_id || isNaN(parseInt(student_id))) {
+    if (!studentId || isNaN(parseInt(studentId))) {
       throw new BadRequest('BAD_REQUEST')
     }
-    if (!career_id || isNaN(parseInt(career_id))) {
+    if (!careerId || isNaN(parseInt(careerId))) {
       throw new BadRequest('BAD_REQUEST')
     }
 
-    const resp = await enrollmentRepository.create({ student_id, career_id })
+    const resp = await enrollmentRepository.create({ studentId, careerId })
     console.debug(`enrollmentController create response`, resp)
     res.json(resp);
   } catch(e) {
@@ -22,4 +34,4 @@ async function create(req, res, next) {
   }
 }
 
-module.exports = { create };
+module.exports = { findAll, create };

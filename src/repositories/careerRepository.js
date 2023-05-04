@@ -1,29 +1,19 @@
-const faunadb = require('faunadb')
-const q = faunadb.query
-
-const client = new faunadb.Client({
-  secret: process.env.FAUNADB,
-})
+const db = require('./db')
 
 function findAll() {
   console.debug(`careerRepository findAll`)
-  return client.query(
-    q.Map(
-      q.Paginate(q.Documents(q.Collection('career'))),
-      q.Lambda(
-        'X',
-        {
-          id: q.Select(['ref', 'id'], q.Get(q.Var('X'))),
-          name: q.Select(['data', 'name'], q.Get(q.Var('X')))
-        }
-      )
-    )
-  )
-  .then(response => response.data)
-  .catch((error) => {
-    console.error('studentRepository error', error)
-    throw new Error(error)
-  })
+  return new Promise((resolve, reject) => {
+    try {
+      db.all("SELECT * FROM career", (err, rows) => {
+        console.error("careerRepository findAll response", rows);
+      return resolve(rows);
+      });
+      
+    } catch(e) {
+      console.error("careerRepository findAll error", err);
+      return reject(err.message);
+    }
+  });
 }
 
 module.exports = { findAll }

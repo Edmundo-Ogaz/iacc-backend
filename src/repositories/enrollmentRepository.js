@@ -1,35 +1,39 @@
-const faunadb = require('faunadb')
-const q = faunadb.query
+const db = require('./db')
 
-const client = new faunadb.Client({
-  secret: process.env.FAUNADB,
-})
-
-async function create(enrollment) {
-  try {
-    console.log('enrollmentRepository create', enrollment)
-
-    const studentRef = await client.query(q.Select(["ref"], q.Get(q.Ref(q.Collection('student'), enrollment.student_id))))
-    const careerRef = await client.query(q.Select(["ref"], q.Get(q.Ref(q.Collection('career'), enrollment.career_id))))
-
-    const response = await client.query(
-      q.Create(
-        q.Collection('enrollment'),
-          {
-            data: {
-              student: studentRef,
-              career: careerRef,
-              createdAt: q.Now()
-            },
-          },
-        )
-      )
-      console.log('enrollmentRepository create response', response)
-      return response.data
-  } catch(e) {
-    console.error('enrollmentRepository error', e)
-    throw new Error(e.message)
-  }
+function findAll() {
+  console.debug(`enrollmentRepository findAll`)
+  return new Promise((resolve, reject) => {
+    try {
+      db.all("SELECT * FROM enrollment", (err, rows) => {
+        console.error("enrollmentRepository findAll response", rows);
+      return resolve(rows);
+      });
+      
+    } catch(e) {
+      console.error("enrollmentRepository findAll error", err);
+      return reject(err.message);
+    }
+  });
 }
 
-module.exports = { create }
+async function create(enrollment) {
+  console.log('enrollmentRepository create', enrollment)
+  return new Promise((resolve, reject) => {
+    const SQL = `INSERT INTO enrollment(id, student_id, career_id) VALUES (?, ?, ?)`;
+    const params = [
+      null,
+      enrollment.studentId,
+      enrollment.careerId,
+    ]
+    return db.run(SQL, params, function (err, res) {
+      if (err) {
+        console.error("enrollmentRepository create error", err);
+        return reject(err.message);
+      }
+      console.error("enrollmentRepository create response", res);
+      return resolve(res);
+    });
+  });
+}
+
+module.exports = { findAll, create }

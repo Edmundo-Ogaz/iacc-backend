@@ -1,148 +1,152 @@
-const faunadb = require('faunadb')
-const q = faunadb.query
-
-const client = new faunadb.Client({
-  secret: process.env.FAUNADB,
-})
+const db = require('./db')
 
 function findAll() {
   console.debug(`studentRepository findAll`)
-  return client.query(
-    q.Map(
-      q.Paginate(q.Documents(q.Collection('student'))),
-      q.Lambda(
-        'X',
-        {
-          id: q.Select(['ref', 'id'], q.Get(q.Var('X'))),
-          name: q.Select(['data', 'name'], q.Get(q.Var('X')))
-        }
-      )
-    )
-  )
-  .then(response => response.data)
-  .catch((error) => {
-    console.error('studentRepository error', error)
-    throw new Error(error)
-  })
+  return new Promise((resolve, reject) => {
+    try {
+      db.all("SELECT * FROM student", (err, rows) => {
+        console.error("studentRepository findAll response", rows);
+      return resolve(rows);
+      });
+      
+    } catch(e) {
+      console.error("studentRepository findAll error", e);
+      return reject(e.message);
+    }
+  });
 }
 
-async function findById(id) {
-  console.debug('studentRepository findById', id)
-  if (isNaN(id)) {
-    throw new Error('BAD_REQUEST')
-  }
-  return client.query(
-    q.Select(['data'], q.Get(
-        q.Ref(q.Collection('student'), id)
-      )
-    )
-  )
-  .then(response => response)
-  .catch((error) => {
-    console.error('studentRepository findById error', error)
-    throw new Error(error)
-  })
+function findById(id) {
+  console.debug(`studentRepository findById`, id)
+  return new Promise((resolve, reject) => {
+    return db.get(`SELECT * FROM student WHERE id = ${id}`, function (err, res) {
+      if (err) {
+        console.error("studentRepository findById error", err);
+        return reject(err.message);
+      }
+      console.error("studentRepository findById response", res);
+      return resolve(res);
+    });
+  });
 }
 
 function findByRut(rut) {
-  console.debug('studentRepository findByRut', rut)
-  return client.query(
-    q.Get(
-      q.Match(
-        q.Ref('indexes/student_by_rut'),
-        rut
-      )
-    )
-  )
-  .then( response => {
-    return {id: response.ref.id, ...response.data}
-  }).catch((e) => {
-    console.error('studentRepository findByRut error', e)
-    if (e.requestResult.statusCode === 404)
-      return {}
-    throw e
-  })
+  console.debug(`studentRepository findByRut`, rut)
+  return new Promise((resolve, reject) => {
+    return db.get(`SELECT * FROM student WHERE rut = ${rut}`, function (err, res) {
+      if (err) {
+        console.error("studentRepository findByRut error", err);
+        return reject(err.message);
+      }
+      console.error("studentRepository findByRut response", res);
+      return resolve(!res ? {} : res);
+    });
+  });
 }
 
-async function create(student) {
-  try {
-    console.log('studentRepository create', student)
-    const response = await client.query(
-      q.Create(
-        q.Collection('student'),
-          {
-            data: {
-              rut: student.rut,
-              name: student.name,
-              phoneNumber: student.phoneNumber,
-              email: student.email,
-              createdAt: q.Now()
-            },
-          },
-        )
-      )
-      console.log('studentRepository create response', response)
-      return response.data
-  } catch(e) {
-    console.error('studentRepository error', e)
-    throw new Error(e.message)
-  }
+async function create2(student) {
+  console.log('studentRepository create', student)
+  return new Promise((resolve, reject) => {
+    try {
+      db.serialize(() => {
+        const stmt = db.prepare("INSERT INTO student VALUES (?, ?, ?, ?, ?)");
+        stmt.run([null, student.rut,
+          student.name,
+          student.phoneNumber,
+          student.email]);
+
+        stmt.finalize();
+      });
+      console.error("studentRepository create response");
+      return resolve('done');
+    } catch(e){
+      return reject(e.message);
+    }
+  });
 }
 
-async function edit(student) {
-  try {
-    console.debug('studentRepository edit', student)
+function create(student) {
+  console.log('studentRepository create', student)
+  return new Promise((resolve, reject) => {
+    const SQL = `INSERT INTO student(id, rut, name, phoneNumber, email) VALUES (?, ?, ?, ?, ?)`;
+    const params = [
+      null,
+      student.rut,
+      student.name,
+      student.phoneNumber,
+      student.email
+    ]
+    return db.run(SQL, params, function (err, res) {
+      if (err) {
+        console.error("studentRepository create error", err);
+        return reject(err.message);
+      }
+      console.error("studentRepository create response", res);
+      return resolve(res);
+    });
+  });
+}
 
-    let data = {}
+function edit(student) {
+  console.log('studentRepository edit', student)
+  return new Promise((resolve, reject) => {
+
+    let sql = [`UPDATE student SET`]
+    let params = []
+
     if (student.rut) {
-      data.rut = student.rut
+      sql.push('rut = ?,')
+      params.push(student.rut)
     }
     if (student.name) {
-      data.name = student.name
+      sql.push('name = ?,')
+      params.push(student.name)
     }
     if (student.phoneNumber) {
-      data.phoneNumber = student.phoneNumber
+      sql.push('phoneNumber = ?,')
+      params.push(student.phoneNumber)
     }
     if (student.email) {
-      data.email = student.email
+      sql.push('email = ?,')
+      params.push(student.email)
     }
 
-    console.debug('studentRepository edit data', data)
+    sql = sql.join(" ")
+    sql = sql[sql.length - 1] === ',' ? sql.slice(0, sql.length - 1) : sql
 
-    const response = await client.query(
-      q.Update(
-        q.Ref(q.Collection('student'), student.id),
-        {
-          data: {
-            ...data,
-            updatedAt: q.Now()
-          }
-        }
-      )
-    )
-    console.debug('studentRepository edit response', response.data)
-    return response.data
-  } catch(e) {
-    console.error('studentRepository edit error', e)
-    throw new Error(e.message)
-  }
+    sql = sql + ' WHERE id = ?'
+    params.push(student.id)
+
+    console.debug("studentRepository edit sql", sql.toString());
+
+    return db.run(sql.toString(), params, function (err, res) {
+      if (err) {
+        console.error("studentRepository edit error", err);
+        return reject(err.message);
+      }
+      console.error("studentRepository edit response", res);
+      return resolve(res);
+    });
+  });
 }
 
-async function remove(id) {
-  console.debug('studentRepository remove', id)
-  if (isNaN(parseInt(id))) {
-    throw new Error('BAD_REQUEST')
-  }
-  return client.query(
-    q.Delete(
-      q.Ref(q.Collection('student'), id)
-    )
-  )
-  .then(response => response)
-  .catch((error) => {
-    console.error('studentRepository remove error', error)
-    throw new Error(error)
-  })
+function remove(id) {
+  console.log('studentRepository remove', id)
+  return new Promise((resolve, reject) => {
+    if (isNaN(parseInt(id))) {
+      resolve(new Error('BAD_REQUEST'))
+    }
+    const SQL = `DELETE FROM student WHERE id = ?`;
+    const param = [parseInt(id)]
+    return db.run(SQL, param, function (err, res) {
+      if (err) {
+        console.error("studentRepository remove error", err);
+        return reject(err.message);
+      }
+      console.error("studentRepository remove response", res);
+      return resolve(res);
+    });
+  });
 }
 
 module.exports = { findAll, findById, findByRut, create, edit, remove }

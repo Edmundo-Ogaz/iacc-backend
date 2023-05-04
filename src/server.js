@@ -21,6 +21,7 @@ app.delete('/students/:id', studentController.remove)
 
 app.get('/careers', careerController.findAll)
 
+app.get('/enrollments', enrollmentController.findAll)
 app.post('/enrollments', enrollmentController.create)
 
 app.use((err, req, res, next) => {
