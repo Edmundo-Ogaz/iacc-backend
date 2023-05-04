@@ -1,11 +1,35 @@
 const db = require('./db')
 
+const SQL = `
+  SELECT 
+  e.id as id,
+  s.id as studentId,
+  s.name as studentName,
+  c.id as careerId,
+  c.name as careerName
+  FROM enrollment e
+  LEFT JOIN student s ON e.student_id = s.id
+  LEFT JOIN career c  ON e.student_id = c.id
+`
+
 function findAll() {
   console.debug(`enrollmentRepository findAll`)
   return new Promise((resolve, reject) => {
     try {
-      db.all("SELECT * FROM enrollment", (err, rows) => {
+      db.all(SQL, (err, rows) => {
         console.error("enrollmentRepository findAll response", rows);
+        rows = rows.map(row => {
+          return {
+            id: row.id,
+            student: {
+              id: row.studentId,
+              name: row.studentName
+            },
+            career: {
+              id: row.careerId,
+              name: row.careerName
+            }}
+        })
       return resolve(rows);
       });
       
