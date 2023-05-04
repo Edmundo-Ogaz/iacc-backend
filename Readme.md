@@ -72,8 +72,11 @@ Inscribir un estudiante a una carrera con el método POST (en el body ingresar e
 http://[IP]:[PORT]:9000/enrollment 
 ````
 
+##Modelo:
 
-###Ejemplos:
+![](/diagram/iacc.db.png)
+
+##Ejemplos:
 
 Para crear un estudiante, se debe ejecuar el siguiente link y en el cuerpo de este, colocar la información del estudiante.
 
