@@ -6,7 +6,7 @@ async function findAll(req, res, next) {
   try {
     console.debug(`studentController findAll`)
     const resp = await studentRepository.findAll()
-    console.debug(`findAll response`, resp)
+    console.debug(`studentController findAll response`, resp)
     res.json(resp);
   } catch(e) {
     console.error(`studentController findAll error`, e)
@@ -45,8 +45,13 @@ async function create(req, res, next) {
     if (!phoneNumber) {
       throw new BadRequest('BAD_REQUEST')
     }
-    if (email && !util.validateEmail(email)) {
+    if (!email || !util.validateEmail(email)) {
       throw new BadRequest('BAD_REQUEST')
+    }
+
+    const objectByRut =  await studentRepository.findByRut(rut)
+    if (Object.keys(objectByRut).length !== 0) {
+      throw new BadRequest('STUDENT_EXIST')
     }
 
     const resp = await studentRepository.create({ rut, name, phoneNumber, email })
@@ -58,4 +63,56 @@ async function create(req, res, next) {
   }
 }
 
-module.exports = { findAll, findById, create };
+async function edit(req, res, next) {
+  try {
+    const id = req.params.id
+    console.debug(`studentController edit`, id, req.body)
+    const { rut, name, phoneNumber, email } = {...req.body}
+
+    if (!id && isNaN(id)) {
+      throw new BadRequest('BAD_REQUEST')
+    }
+    if (rut && !util.validateRut(rut)) {
+      throw new BadRequest('BAD_REQUEST')
+    }
+    if (name && name.trim() === '') {
+      throw new BadRequest('BAD_REQUEST')
+    }
+    if (email && !util.validateEmail(email)) {
+      throw new BadRequest('BAD_REQUEST')
+    }
+
+    if (rut) {
+      const objectByRut =  await studentRepository.findByRut(rut)
+      if (Object.keys(objectByRut).length !== 0 && objectByRut.id != id) {
+        throw new BadRequest('STUDENT_EXIST')
+      }
+    }
+
+    const resp = await studentRepository.edit({ id, rut, name, phoneNumber, email })
+    console.debug(`studentController edit response`, resp)
+    res.json(resp);
+  } catch(e) {
+    console.error(`studentController edit error`, e)
+    next(e)
+  }
+}
+
+async function remove(req, res, next) {
+  try {
+    const id = req.params.id;
+    console.debug(`studentController remove`)
+    if (isNaN(id)) {
+      throw new BadRequest('BAD_REQUEST')
+    }
+
+    const resp = await studentRepository.remove(id)
+    console.debug(`studentController remove response`, resp)
+    res.json(resp);
+  } catch(e) {
+    console.error(`studentController remove error`, e)
+    next(e)
+  }
+}
+
+module.exports = { findAll, findById, create, edit, remove };
