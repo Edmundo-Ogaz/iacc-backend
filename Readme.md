@@ -24,7 +24,7 @@ npm run start
 
 Una vez iniciada la aplicación, se puede ingresar a los siguientes links:
 
-####Para gestionar estudiantes:
+#### Para gestionar estudiantes:
 
 Obtener todos los estudianes con el método GET.
 
@@ -56,7 +56,7 @@ Eliminar un estudiante por id con el método DELETE.
 DELETE: http://[IP]:[PORT]/students/[ID]
 ````
 
-####Para gestionar carreras:
+#### Para gestionar carreras:
 
 Obtener todos las carreras con el método GET.
 
@@ -64,7 +64,7 @@ Obtener todos las carreras con el método GET.
 GET: http://[IP]:[PORT]/careers
 ````
 
-####Para inscribir un estudiante a una carrera:
+#### Para inscribir un estudiante a una carrera:
 
 Inscribir un estudiante a una carrera con el método POST (en el body ingresar el id del estudiante y el id de la carrera).
 
@@ -72,16 +72,16 @@ Inscribir un estudiante a una carrera con el método POST (en el body ingresar e
 POST: http://[IP]:[PORT]/enrollment 
 ````
 
-##Modelos
+## Modelos
 
-###Modelos de la aplicación
+### Modelos de la aplicación
 ![](/diagrams/diagramClass.png)
 
-###Modelos de datos
+### Modelos de datos
 
 ![](/diagrams/iacc.db.png)
 
-##Ejemplos:
+## Ejemplos:
 
 Para crear un estudiante, se debe ejecuar el siguiente link y en el cuerpo de este, colocar la información del estudiante.
 
@@ -210,7 +210,7 @@ Response:
 
 Para realizar pruebas de estres hay que ejecutar el siguiente comando con la aplicación funcionando.
 
-````
+```
 npm run loadtest
 ```
 
