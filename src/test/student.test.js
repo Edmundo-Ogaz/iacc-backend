@@ -1,8 +1,5 @@
 const supertest = require('supertest');
 
-// const app = require('../server');
-// const requester = supertest(app);
-
 let requester;
 const createRequester = () => {
     const app = require('../server');
@@ -113,6 +110,29 @@ describe('students api edit', () => {
         }
         const student = await requester.patch('/students/x')
             .send(OBJECT)
+            .expect(400);
+        expect(student.statusCode).toEqual(400)
+        expect(JSON.stringify(student.body)).toBe(JSON.stringify({error: 'BAD_REQUEST'}));
+    })
+})
+
+describe('students api remove', () => {
+    beforeEach(() => {
+        jest.resetModules()
+        jest.doMock('../repositories/studentRepository', () => {
+            return {
+                remove: () => Promise.resolve({message: 'success'})
+            }
+        })
+        requester = createRequester()
+    })
+    it('removing student success', async () => {
+        const student = await requester.delete('/students/1')
+            .expect(200);
+        expect(JSON.stringify(student.body)).toBe(JSON.stringify({message: 'success'}));
+    })
+    it('removing student fail', async () => {
+        const student = await requester.delete('/students/x')
             .expect(400);
         expect(student.statusCode).toEqual(400)
         expect(JSON.stringify(student.body)).toBe(JSON.stringify({error: 'BAD_REQUEST'}));

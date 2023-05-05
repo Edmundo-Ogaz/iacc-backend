@@ -1,19 +1,15 @@
 const db = require('./db')
 
-function findAll() {
+async function findAll() {
   console.debug(`careerRepository findAll`)
-  return new Promise((resolve, reject) => {
-    try {
-      db.all("SELECT * FROM career", (err, rows) => {
-        console.error("careerRepository findAll response", rows);
-      return resolve(rows);
-      });
-      
-    } catch(e) {
-      console.error("careerRepository findAll error", err);
-      return reject(err.message);
-    }
-  });
+  try {
+    const rows = await db.all("SELECT * FROM career")
+    console.error("careerRepository findAll response", rows)
+    return rows;
+  } catch(e) {
+    console.error("careerRepository findAll error", e);
+    return e
+  }
 }
 
 module.exports = { findAll }

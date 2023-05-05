@@ -1,52 +1,44 @@
 const db = require('./db')
 
-function findAll() {
+async function findAll() {
   console.debug(`studentRepository findAll`)
-  return new Promise((resolve, reject) => {
-    try {
-      db.all("SELECT * FROM student", (err, rows) => {
-        console.error("studentRepository findAll response", rows);
-      return resolve(rows);
-      });
-      
-    } catch(e) {
-      console.error("studentRepository findAll error", e);
-      return reject(e.message);
-    }
-  });
+  try {
+    const rows = await db.all("SELECT * FROM student")
+    console.error("studentRepository findAll response", rows)
+    return rows;
+  } catch(e) {
+    console.error("studentRepository findAll error", e);
+    return e
+  }
 }
 
-function findById(id) {
+async function findById(id) {
   console.debug(`studentRepository findById`, id)
-  return new Promise((resolve, reject) => {
-    return db.get(`SELECT * FROM student WHERE id = ${id}`, function (err, res) {
-      if (err) {
-        console.error("studentRepository findById error", err);
-        return reject(err.message);
-      }
-      console.error("studentRepository findById response", res);
-      return resolve(res);
-    });
-  });
+  try {
+    const row = await db.get(`SELECT * FROM student WHERE id = ${id}`)
+    console.error("studentRepository findById response", row)
+    return row;
+  } catch(e) {
+    console.error("studentRepository findById error", e);
+    return e
+  }
 }
 
-function findByRut(rut) {
+async function findByRut(rut) {
   console.debug(`studentRepository findByRut`, rut)
-  return new Promise((resolve, reject) => {
-    return db.get(`SELECT * FROM student WHERE rut = ${rut}`, function (err, res) {
-      if (err) {
-        console.error("studentRepository findByRut error", err);
-        return reject(err.message);
-      }
-      console.error("studentRepository findByRut response", res);
-      return resolve(!res ? {} : res);
-    });
-  });
+  try {
+    const row = await db.get(`SELECT * FROM student WHERE rut = ${rut}`)
+    console.error("studentRepository findByRut response", row)
+    return row;
+  } catch(e) {
+    console.error("studentRepository findByRut error", e);
+    return e
+  }
 }
 
-function create(student) {
-  console.log('studentRepository create', student)
-  return new Promise((resolve, reject) => {
+async function create(student) {
+  console.debug(`studentRepository create`, student)
+  try {
     const SQL = `INSERT INTO student(id, rut, name, phoneNumber, email) VALUES (?, ?, ?, ?, ?)`;
     const params = [
       null,
@@ -55,21 +47,18 @@ function create(student) {
       student.phoneNumber,
       student.email
     ]
-    return db.run(SQL, params, function (err, res) {
-      if (err) {
-        console.error("studentRepository create error", err);
-        return reject(err.message);
-      }
-      console.error("studentRepository create response", res);
-      return resolve({message: 'success'});
-    });
-  });
+    const row = await db.run(SQL, params)
+    console.error("studentRepository create response", row)
+    return row;
+  } catch(e) {
+    console.error("studentRepository create error", e);
+    return e
+  }
 }
 
-function edit(student) {
-  console.log('studentRepository edit', student)
-  return new Promise((resolve, reject) => {
-
+async function edit(student) {
+  console.debug(`studentRepository edit`, student)
+  try {
     let sql = [`UPDATE student SET`]
     let params = []
 
@@ -97,35 +86,27 @@ function edit(student) {
     params.push(student.id)
 
     console.debug("studentRepository edit sql", sql.toString());
-
-    return db.run(sql.toString(), params, function (err, res) {
-      if (err) {
-        console.error("studentRepository edit error", err);
-        return reject(err.message);
-      }
-      console.error("studentRepository edit response", res);
-      return resolve({message: 'success'});
-    });
-  });
+    const row = await db.run(sql, params)
+    console.error("studentRepository edit response", row)
+    return row;
+  } catch(e) {
+    console.error("studentRepository edit error", e);
+    return e
+  }
 }
 
-function remove(id) {
-  console.log('studentRepository remove', id)
-  return new Promise((resolve, reject) => {
-    if (isNaN(parseInt(id))) {
-      resolve(new Error('BAD_REQUEST'))
-    }
+async function remove(id) {
+  console.debug(`studentRepository remove`, id)
+  try {
     const SQL = `DELETE FROM student WHERE id = ?`;
-    const param = [parseInt(id)]
-    return db.run(SQL, param, function (err, res) {
-      if (err) {
-        console.error("studentRepository remove error", err);
-        return reject(err.message);
-      }
-      console.error("studentRepository remove response", res);
-      return resolve({message: 'success'});
-    });
-  });
+    const params = [parseInt(id)]
+    const row = await db.run(SQL, params)
+    console.error("studentRepository remove response", row)
+    return row;
+  } catch(e) {
+    console.error("studentRepository remove error", e);
+    return e
+  }
 }
 
 module.exports = { findAll, findById, findByRut, create, edit, remove }

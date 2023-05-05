@@ -12,52 +12,46 @@ const SQL = `
   LEFT JOIN career c  ON e.student_id = c.id
 `
 
-function findAll() {
+async function findAll() {
   console.debug(`enrollmentRepository findAll`)
-  return new Promise((resolve, reject) => {
-    try {
-      db.all(SQL, (err, rows) => {
-        console.error("enrollmentRepository findAll response", rows);
-        rows = rows.map(row => {
-          return {
-            id: row.id,
-            student: {
-              id: row.studentId,
-              name: row.studentName
-            },
-            career: {
-              id: row.careerId,
-              name: row.careerName
-            }}
-        })
-      return resolve(rows);
-      });
-      
-    } catch(e) {
-      console.error("enrollmentRepository findAll error", err);
-      return reject(err.message);
-    }
-  });
+  try {
+    let rows = await db.all(SQL)
+    rows = rows.map(row => {
+      return {
+        id: row.id,
+        student: {
+          id: row.studentId,
+          name: row.studentName
+        },
+        career: {
+          id: row.careerId,
+          name: row.careerName
+        }}
+    })
+    console.error("enrollmentRepository findAll response", rows)
+    return rows;
+  } catch(e) {
+    console.error("enrollmentRepository findAll error", e);
+    return e
+  }
 }
 
 async function create(enrollment) {
-  console.log('enrollmentRepository create', enrollment)
-  return new Promise((resolve, reject) => {
+  console.debug(`enrollmentRepository create`, enrollment)
+  try {
     const SQL = `INSERT INTO enrollment(id, student_id, career_id) VALUES (?, ?, ?)`;
     const params = [
       null,
       enrollment.studentId,
       enrollment.careerId,
     ]
-    return db.run(SQL, params, function (err, res) {
-      if (err) {
-        console.error("enrollmentRepository create error", err);
-        return reject(err.message);
-      }
-      console.error("enrollmentRepository create response", res);
-      return resolve({message: 'success'});
-    });
-  });
+    const row = await db.run(SQL, params)
+    console.error("enrollmentRepository create response", row)
+    return row;
+  } catch(e) {
+    console.error("enrollmentRepository create error", e);
+    return e
+  }
 }
 
 module.exports = { findAll, create }
