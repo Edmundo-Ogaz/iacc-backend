@@ -44,27 +44,6 @@ function findByRut(rut) {
   });
 }
 
-async function create2(student) {
-  console.log('studentRepository create', student)
-  return new Promise((resolve, reject) => {
-    try {
-      db.serialize(() => {
-        const stmt = db.prepare("INSERT INTO student VALUES (?, ?, ?, ?, ?)");
-        stmt.run([null, student.rut,
-          student.name,
-          student.phoneNumber,
-          student.email]);
-
-        stmt.finalize();
-      });
-      console.error("studentRepository create response");
-      return resolve('done');
-    } catch(e){
-      return reject(e.message);
-    }
-  });
-}
-
 function create(student) {
   console.log('studentRepository create', student)
   return new Promise((resolve, reject) => {

@@ -6,3 +6,6 @@ test:
 
 loadtest:
 	npm run loadtest
+
+test-test:
+	'node_modules/.bin/jest' 'src/test/student.test.js' -t "editing student success"
