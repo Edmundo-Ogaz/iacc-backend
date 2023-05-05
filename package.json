@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "jest --silent",
-    "loadtest": "node ./src/test/load/test.js"
+    "loadtest": "node ./src/test/load/loadtest.js"
   },
   "repository": {
     "type": "git",

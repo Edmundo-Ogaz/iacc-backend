@@ -1,5 +1,6 @@
 const BadRequest = require('../errors/BadRequest')
 const studentRepository = require('../repositories/studentRepository')
+const enrollmentRepository = require('../repositories/enrollmentRepository')
 const util = require('../utils')
 
 async function findAll(req, res, next) {
@@ -104,6 +105,11 @@ async function remove(req, res, next) {
     console.debug(`studentController remove`)
     if (isNaN(id)) {
       throw new BadRequest('BAD_REQUEST')
+    }
+
+    const objectById =  await enrollmentRepository.findByStudenId(id)
+    if (Object.keys(objectById).length !== 0) {
+      throw new BadRequest('STUDENT_IS_ENROLLMENT')
     }
 
     const resp = await studentRepository.remove(id)

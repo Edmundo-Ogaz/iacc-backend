@@ -121,6 +121,7 @@ describe('students api remove', () => {
         jest.resetModules()
         jest.doMock('../../repositories/db', () => {
             return {
+                get: () => Promise.resolve({}),
                 run: () => Promise.resolve({message: 'success'})
             }
         })
