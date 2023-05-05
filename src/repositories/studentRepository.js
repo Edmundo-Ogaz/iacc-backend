@@ -4,7 +4,7 @@ async function findAll() {
   console.debug(`studentRepository findAll`)
   try {
     const rows = await db.all("SELECT * FROM student")
-    console.error("studentRepository findAll response", rows)
+    console.debug("studentRepository findAll response", rows)
     return rows;
   } catch(e) {
     console.error("studentRepository findAll error", e);
@@ -16,7 +16,7 @@ async function findById(id) {
   console.debug(`studentRepository findById`, id)
   try {
     const row = await db.get(`SELECT * FROM student WHERE id = ${id}`)
-    console.error("studentRepository findById response", row)
+    console.debug("studentRepository findById response", row)
     return row;
   } catch(e) {
     console.error("studentRepository findById error", e);
@@ -28,7 +28,7 @@ async function findByRut(rut) {
   console.debug(`studentRepository findByRut`, rut)
   try {
     const row = await db.get(`SELECT * FROM student WHERE rut = ${rut}`)
-    console.error("studentRepository findByRut response", row)
+    console.debug("studentRepository findByRut response", row)
     return row;
   } catch(e) {
     console.error("studentRepository findByRut error", e);
@@ -48,7 +48,7 @@ async function create(student) {
       student.email
     ]
     const row = await db.run(SQL, params)
-    console.error("studentRepository create response", row)
+    console.debug("studentRepository create response", row)
     return row;
   } catch(e) {
     console.error("studentRepository create error", e);
@@ -87,7 +87,7 @@ async function edit(student) {
 
     console.debug("studentRepository edit sql", sql.toString());
     const row = await db.run(sql, params)
-    console.error("studentRepository edit response", row)
+    console.debug("studentRepository edit response", row)
     return row;
   } catch(e) {
     console.error("studentRepository edit error", e);
@@ -101,7 +101,7 @@ async function remove(id) {
     const SQL = `DELETE FROM student WHERE id = ?`;
     const params = [parseInt(id)]
     const row = await db.run(SQL, params)
-    console.error("studentRepository remove response", row)
+    console.debug("studentRepository remove response", row)
     return row;
   } catch(e) {
     console.error("studentRepository remove error", e);

@@ -18,9 +18,9 @@ describe('students api find all', () => {
 describe('students api findById', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/studentRepository', () => {
+        jest.doMock('../repositories/db', () => {
             return {
-                findById: () => Promise.resolve({id: 1})
+                get: () => Promise.resolve({id: 1})
             }
         })
         requester = createRequester()
@@ -39,10 +39,10 @@ describe('students api findById', () => {
 describe('students api create', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/studentRepository', () => {
+        jest.doMock('../repositories/db', () => {
             return {
-                findByRut: () => Promise.resolve({}),
-                create: () => Promise.resolve({message: 'success'})
+                gel: () => Promise.resolve({}),
+                run: () => Promise.resolve({message: 'success'})
             }
         })
         requester = createRequester()
@@ -79,10 +79,10 @@ describe('students api create', () => {
 describe('students api edit', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/studentRepository', () => {
+        jest.doMock('../repositories/db', () => {
             return {
-                findByRut: () => Promise.resolve({}),
-                edit: () => Promise.resolve({message: 'success'})
+                get: () => Promise.resolve({}),
+                run: () => Promise.resolve({message: 'success'})
             }
         })
         requester = createRequester()
@@ -119,9 +119,9 @@ describe('students api edit', () => {
 describe('students api remove', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/studentRepository', () => {
+        jest.doMock('../repositories/db', () => {
             return {
-                remove: () => Promise.resolve({message: 'success'})
+                run: () => Promise.resolve({message: 'success'})
             }
         })
         requester = createRequester()

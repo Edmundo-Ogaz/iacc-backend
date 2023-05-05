@@ -8,4 +8,4 @@ loadtest:
 	npm run loadtest
 
 test-test:
-	'node_modules/.bin/jest' 'src/test/student.test.js' -t "removing student fail"
+	'node_modules/.bin/jest' 'src/test/student.test.js' -t "removing student success"

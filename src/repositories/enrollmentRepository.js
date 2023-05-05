@@ -28,7 +28,7 @@ async function findAll() {
           name: row.careerName
         }}
     })
-    console.error("enrollmentRepository findAll response", rows)
+    console.debug("enrollmentRepository findAll response", rows)
     return rows;
   } catch(e) {
     console.error("enrollmentRepository findAll error", e);
@@ -46,7 +46,7 @@ async function create(enrollment) {
       enrollment.careerId,
     ]
     const row = await db.run(SQL, params)
-    console.error("enrollmentRepository create response", row)
+    console.debug("enrollmentRepository create response", row)
     return row;
   } catch(e) {
     console.error("enrollmentRepository create error", e);

@@ -18,9 +18,9 @@ describe('enrollments api find all', () => {
 describe('enrollments api create', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/enrollmentRepository', () => {
+        jest.doMock('../repositories/db', () => {
             return {
-                create: () => Promise.resolve({message: 'success'})
+                run: () => Promise.resolve({message: 'success'})
             }
         })
         requester = createRequester()
