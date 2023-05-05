@@ -1,4 +1,5 @@
 const db = require('./db')
+const BadRequest = require('../errors/BadRequest')
 
 const SQL = `
   SELECT 
@@ -38,6 +39,10 @@ async function findAll() {
 
 async function create(enrollment) {
   console.debug(`enrollmentRepository create`, enrollment)
+  if (!enrollment.studentId || isNaN(parseInt(enrollment.studentId)) || 
+    !enrollment.careerId || isNaN(parseInt(enrollment.careerId))) {
+    throw new BadRequest('BAD_REQUEST')
+  }
   try {
     const SQL = `INSERT INTO enrollment(id, student_id, career_id) VALUES (?, ?, ?)`;
     const params = [

@@ -1,6 +1,6 @@
 const supertest = require('supertest');
 
-const app = require('../server');
+const app = require('../../server');
 const requester = supertest(app);
 
 describe('careers api find all', () => {

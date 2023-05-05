@@ -1,4 +1,6 @@
 const db = require('./db')
+const BadRequest = require('../errors/BadRequest')
+const util = require('../utils')
 
 async function findAll() {
   console.debug(`studentRepository findAll`)
@@ -14,6 +16,9 @@ async function findAll() {
 
 async function findById(id) {
   console.debug(`studentRepository findById`, id)
+  if (isNaN(id)) {
+    throw new BadRequest('BAD_REQUEST')
+  }
   try {
     const row = await db.get(`SELECT * FROM student WHERE id = ${id}`)
     console.debug("studentRepository findById response", row)
@@ -26,6 +31,9 @@ async function findById(id) {
 
 async function findByRut(rut) {
   console.debug(`studentRepository findByRut`, rut)
+  if (!rut || !util.validateRut(rut)) {
+    throw new BadRequest('BAD_REQUEST')
+  }
   try {
     const row = await db.get(`SELECT * FROM student WHERE rut = ${rut}`)
     console.debug("studentRepository findByRut response", row)
@@ -38,6 +46,10 @@ async function findByRut(rut) {
 
 async function create(student) {
   console.debug(`studentRepository create`, student)
+  if (!student.rut || !util.validateRut(student.rut) || !student.name || student.name.trim() === '' || 
+    !student.phoneNumber || !student.email || !util.validateEmail(student.email)) {
+    throw new BadRequest('BAD_REQUEST')
+  }
   try {
     const SQL = `INSERT INTO student(id, rut, name, phoneNumber, email) VALUES (?, ?, ?, ?, ?)`;
     const params = [
@@ -97,6 +109,9 @@ async function edit(student) {
 
 async function remove(id) {
   console.debug(`studentRepository remove`, id)
+  if (isNaN(id)) {
+    throw new BadRequest('BAD_REQUEST')
+  }
   try {
     const SQL = `DELETE FROM student WHERE id = ?`;
     const params = [parseInt(id)]

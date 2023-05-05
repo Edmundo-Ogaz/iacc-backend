@@ -2,7 +2,7 @@ const supertest = require('supertest');
 
 let requester;
 const createRequester = () => {
-    const app = require('../server');
+    const app = require('../../server');
     return supertest(app);
 }
 
@@ -18,7 +18,7 @@ describe('enrollments api find all', () => {
 describe('enrollments api create', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/db', () => {
+        jest.doMock('../../repositories/db', () => {
             return {
                 run: () => Promise.resolve({message: 'success'})
             }

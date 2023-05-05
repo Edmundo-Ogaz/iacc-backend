@@ -2,7 +2,7 @@ const supertest = require('supertest');
 
 let requester;
 const createRequester = () => {
-    const app = require('../server');
+    const app = require('../../server');
     return supertest(app);
 }
 
@@ -18,7 +18,7 @@ describe('students api find all', () => {
 describe('students api findById', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/db', () => {
+        jest.doMock('../../repositories/db', () => {
             return {
                 get: () => Promise.resolve({id: 1})
             }
@@ -39,7 +39,7 @@ describe('students api findById', () => {
 describe('students api create', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/db', () => {
+        jest.doMock('../../repositories/db', () => {
             return {
                 gel: () => Promise.resolve({}),
                 run: () => Promise.resolve({message: 'success'})
@@ -79,7 +79,7 @@ describe('students api create', () => {
 describe('students api edit', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/db', () => {
+        jest.doMock('../../repositories/db', () => {
             return {
                 get: () => Promise.resolve({}),
                 run: () => Promise.resolve({message: 'success'})
@@ -119,7 +119,7 @@ describe('students api edit', () => {
 describe('students api remove', () => {
     beforeEach(() => {
         jest.resetModules()
-        jest.doMock('../repositories/db', () => {
+        jest.doMock('../../repositories/db', () => {
             return {
                 run: () => Promise.resolve({message: 'success'})
             }
