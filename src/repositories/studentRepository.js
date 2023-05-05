@@ -71,33 +71,36 @@ async function create(student) {
 async function edit(student) {
   console.debug(`studentRepository edit`, student)
   try {
-    let sql = [`UPDATE student SET`]
+    let query = ``
     let params = []
 
     if (student.rut) {
-      sql.push('rut = ?,')
+      query += ' rut = ?,'
       params.push(student.rut)
     }
     if (student.name) {
-      sql.push('name = ?,')
+      query += ' name = ?,'
       params.push(student.name)
     }
     if (student.phoneNumber) {
-      sql.push('phoneNumber = ?,')
+      query += ' phoneNumber = ?,'
       params.push(student.phoneNumber)
     }
     if (student.email) {
-      sql.push('email = ?,')
+      query += ' email = ?,'
       params.push(student.email)
     }
 
-    sql = sql.join(" ")
-    sql = sql[sql.length - 1] === ',' ? sql.slice(0, sql.length - 1) : sql
+    if (!query) {
+      throw new BadRequest('BAD_REQUEST')
+    }
 
-    sql = sql + ' WHERE id = ?'
+    query = query.slice(0, [query.length - 1])
+
+    const sql = `UPDATE student SET` + query + ' WHERE id = ?'
     params.push(student.id)
 
-    console.debug("studentRepository edit sql", sql.toString());
+    console.debug("studentRepository edit sql", sql);
     const row = await db.run(sql, params)
     console.debug("studentRepository edit response", row)
     return row;
