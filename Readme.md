@@ -29,31 +29,31 @@ Una vez iniciada la aplicación, se puede ingresar a los siguientes links:
 Obtener todos los estudianes con el método GET.
 
 ```
-GET: http://[IP]:[PORT]:9000/students
+GET: http://[IP]:[PORT]/students
 ````
 
 Crear un estudiante con el método POST (en el body ingresar los datos del estudiante).
 
 ```
-POST: http://[IP]:[PORT]:9000/students
+POST: http://[IP]:[PORT]/students
 ````
  
 Obtener un estudiante por id con el método GET.
 
 ```
-GET: http://[IP]:[PORT]:9000/students/[ID]
+GET: http://[IP]:[PORT]/students/[ID]
 ````
 
 Actualizar un estudiante por id con el método PATCH (en el body ingresar los datos a actualizar).
 
 ```
-PATCH: http://[IP]:[PORT]:9000/students/[ID] 
+PATCH: http://[IP]:[PORT]/students/[ID] 
 ````
 
 Eliminar un estudiante por id con el método DELETE.
 
 ````
-DELETE: http://[IP]:[PORT]:9000/students/[ID]
+DELETE: http://[IP]:[PORT]/students/[ID]
 ````
 
 ####Para gestionar carreras:
@@ -61,7 +61,7 @@ DELETE: http://[IP]:[PORT]:9000/students/[ID]
 Obtener todos las carreras con el método GET.
 
 ````
-GET: http://[IP]:[PORT]:9000/careers
+GET: http://[IP]:[PORT]/careers
 ````
 
 ####Para inscribir un estudiante a una carrera:
@@ -69,7 +69,7 @@ GET: http://[IP]:[PORT]:9000/careers
 Inscribir un estudiante a una carrera con el método POST (en el body ingresar el id del estudiante y el id de la carrera).
 
 ````
-POST: http://[IP]:[PORT]:9000/enrollment 
+POST: http://[IP]:[PORT]/enrollment 
 ````
 
 ##Modelo:
