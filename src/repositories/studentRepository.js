@@ -82,7 +82,7 @@ function create(student) {
         return reject(err.message);
       }
       console.error("studentRepository create response", res);
-      return resolve(res);
+      return resolve({message: 'success'});
     });
   });
 }
@@ -125,7 +125,7 @@ function edit(student) {
         return reject(err.message);
       }
       console.error("studentRepository edit response", res);
-      return resolve(res);
+      return resolve({message: 'success'});
     });
   });
 }
@@ -144,7 +144,7 @@ function remove(id) {
         return reject(err.message);
       }
       console.error("studentRepository remove response", res);
-      return resolve(res);
+      return resolve({message: 'success'});
     });
   });
 }

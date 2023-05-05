@@ -81,22 +81,38 @@ http://[IP]:[PORT]:9000/enrollment
 Para crear un estudiante, se debe ejecuar el siguiente link y en el cuerpo de este, colocar la información del estudiante.
 
 
-```json
+```
 POST: http://[IP]:[PORT]/students
+````
 
+Request:
+
+```json
 {   
     "rut": "[rut del studiante]",
     "name": "[nombre del studiante]",
     "phoneNumber": "[telefono del studiante]",
     "email": "[email del studiante]"
+}
+```
+
+Response:
+
+```json
+{
+    "message": "success"
 }
 ```
 
 Para actualizar al estudiante, se debe ejecuar el siguiente link, y en el cuerpo de este, colocar la información que se quiere actualizar.
 
-```json
+```
 PATCH: http://[IP]:[PORT]/students
+````
 
+Request:
+
+```json
 {   
     "rut": "[rut del studiante]",
     "name": "[nombre del studiante]",
@@ -105,36 +121,87 @@ PATCH: http://[IP]:[PORT]/students
 }
 ```
 
-Para eliminar un estudiante, se debe ejecutar el siguiente link, el cual contiene el ID del estudiante.
+Response:
 
 ```json
+{
+    "message": "success"
+}
+```
+
+Para eliminar un estudiante, se debe ejecutar el siguiente link, el cual contiene el ID del estudiante.
+
+```
 DELETE: http://[IP]:[PORT]/students/[ID]
+```
+
+Response:
+
+```json
+{
+    "message": "success"
+}
 ```
 
 Para listar los estudiante, se debe ejecutar el siguiente link.
 
-```json
+```
 GET: http://[IP]:[PORT]/students
+```
+
+Response:
+
+```json
+[
+    {   
+        "id": "[id del studiante]",
+        "rut": "[rut del studiante]",
+        "name": "[nombre del studiante]",
+        "phoneNumber": "[telefono del studiante]",
+        "email": "[email del studiante]"
+    }
+]
 ```
 
 Para listar las carreras, se debe ejecutar el siguiente link.
 
-```json
+```
 GET: http://[IP]:[PORT]/careers
 ```
 
+Response:
+
+```json
+[
+    {
+        "id": "[id de la carrera]",
+        "name": "[nombre de la carrera]",
+    }
+]
+```
 Para ingresar un estudiante a una carrera, se debe ejecuar el siguiente link y en el cuerpo de este, colocar el id de estudiante y el id de la carrera.
 
 
-```json
+```
 POST: http://[IP]:[PORT]/enrollments
+```
 
+Request:
+
+```json
 {   
     "studenId": "[id del studiante]",
     "careerId": "[id de la carrera]",
 }
 ```
 
+Response:
+
+```json
+{
+    "message": "success"
+}
+```
 ## Pruebas de estres
 
 Para realizar pruebas de estes hay que ejecutar el siguiente comando con la aplicación andando.

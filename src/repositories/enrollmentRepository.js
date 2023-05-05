@@ -55,7 +55,7 @@ async function create(enrollment) {
         return reject(err.message);
       }
       console.error("enrollmentRepository create response", res);
-      return resolve(res);
+      return resolve({message: 'success'});
     });
   });
 }
