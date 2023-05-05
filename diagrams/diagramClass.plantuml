@@ -1,0 +1,57 @@
+@startuml
+
+package app {
+
+    server ..> studentController
+    server ..> careerController
+    server ..> enrollmentController
+
+    studentController : + findAll()
+    studentController : + findById()
+    studentController : + create()
+    studentController : + edit()
+    studentController : + remove()
+    studentController ..> student
+    studentController ..> studentRepository
+    studentController ..> enrollmentRepository
+
+    studentRepository : + findAll()
+    studentRepository : + findById(id)
+    studentRepository : + findByRut(rut)
+    studentRepository : + create(student)
+    studentRepository : + edit(student)
+    studentRepository : + remove(id)
+    studentRepository ..> student
+
+    enrollmentController : + findAll()
+    enrollmentController : + create()
+    enrollmentController ..> enrollmentRepository
+    enrollmentController ..> enrollment
+
+    enrollmentRepository : + findAll()
+    enrollmentRepository : + findByStudenId(id)
+    enrollmentRepository : + create(enrollment)
+    enrollmentRepository ..> enrollment
+
+    careerController : + findAll()
+    careerController ..> careerRepository
+    careerController ..> career
+
+    careerRepository : + findAll()
+    careerRepository ..> career
+
+    student : + id
+    student : + rut
+    student : + name
+    student : + phoneNumber
+    student : + email
+
+    career : + id
+    career : + name
+
+    enrollment : + id
+    enrollment : + studentId
+    enrollment : + careerId
+}
+
+@enduml

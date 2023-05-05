@@ -72,9 +72,14 @@ Inscribir un estudiante a una carrera con el método POST (en el body ingresar e
 POST: http://[IP]:[PORT]/enrollment 
 ````
 
-##Modelo:
+##Modelos
 
-![](/diagram/iacc.db.png)
+###Modelos de la aplicación
+![](/diagrams/diagramClass.png)
+
+###Modelos de datos
+
+![](/diagrams/iacc.db.png)
 
 ##Ejemplos:
 
