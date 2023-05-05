@@ -1,6 +1,6 @@
 # Desafío Técnico: Ingeniero de Desarrollo FullStack
 
-Aplicación backend para la gestión de estudiantes, la cual permite asociar un estudiante a una carrera y además las correspondientes operaciones CRUD para gestionar a los estudiantessobre.
+Aplicación backend para la gestión de estudiantes, la cual permite asociar un estudiante a una carrera y además las correspondientes operaciones CRUD para gestionar a los estudiantes.
 
 ## Requisitos
 
@@ -26,50 +26,50 @@ Una vez iniciada la aplicación, se puede ingresar a los siguientes links:
 
 ####Para gestionar estudiantes:
 
-Obtener todos los estudianes con el método GET
+Obtener todos los estudianes con el método GET.
 
 ```
-http://[IP]:[PORT]:9000/students
+GET: http://[IP]:[PORT]:9000/students
 ````
 
-Crear un estudiante con el método POST (en el body ingresar datos del estudiante)
+Crear un estudiante con el método POST (en el body ingresar los datos del estudiante).
 
 ```
-http://[IP]:[PORT]:9000/students
+POST: http://[IP]:[PORT]:9000/students
 ````
  
-Obtener un estudiante por id con el método GET
+Obtener un estudiante por id con el método GET.
 
 ```
-http://[IP]:[PORT]:9000/students/[ID]
+GET: http://[IP]:[PORT]:9000/students/[ID]
 ````
 
-Actualizar un estudiante por id con el método PATCH (en el body ingresar los datos a actualizar)
+Actualizar un estudiante por id con el método PATCH (en el body ingresar los datos a actualizar).
 
 ```
-http://[IP]:[PORT]:9000/students/[ID] 
+PATCH: http://[IP]:[PORT]:9000/students/[ID] 
 ````
 
-Eliminar un estudiante por id con el método DELETE
+Eliminar un estudiante por id con el método DELETE.
 
 ````
-http://[IP]:[PORT]:9000/students/[ID]
+DELETE: http://[IP]:[PORT]:9000/students/[ID]
 ````
 
 ####Para gestionar carreras:
 
-Obtener todos los carreras con el método GET
+Obtener todos las carreras con el método GET.
 
 ````
-http://[IP]:[PORT]:9000/careers
+GET: http://[IP]:[PORT]:9000/careers
 ````
 
 ####Para inscribir un estudiante a una carrera:
 
-Inscribir un estudiante a una carrera con el método POST (en el body ingresar el id del estudiante y el id de la carrera)
+Inscribir un estudiante a una carrera con el método POST (en el body ingresar el id del estudiante y el id de la carrera).
 
 ````
-http://[IP]:[PORT]:9000/enrollment 
+POST: http://[IP]:[PORT]:9000/enrollment 
 ````
 
 ##Modelo:
@@ -85,7 +85,7 @@ Para crear un estudiante, se debe ejecuar el siguiente link y en el cuerpo de es
 POST: http://[IP]:[PORT]/students
 ````
 
-Request:
+Body:
 
 ```json
 {   
@@ -104,13 +104,13 @@ Response:
 }
 ```
 
-Para actualizar al estudiante, se debe ejecuar el siguiente link, y en el cuerpo de este, colocar la información que se quiere actualizar.
+Para actualizar un estudiante, se debe ejecuar el siguiente link indicando el ID del estudiante, y en el cuerpo de la solicitud, colocar la información que se quiere actualizar.
 
 ```
-PATCH: http://[IP]:[PORT]/students
+PATCH: http://[IP]:[PORT]/students/[ID]
 ````
 
-Request:
+Body:
 
 ```json
 {   
@@ -179,14 +179,13 @@ Response:
     }
 ]
 ```
-Para ingresar un estudiante a una carrera, se debe ejecuar el siguiente link y en el cuerpo de este, colocar el id de estudiante y el id de la carrera.
-
+Para ingresar un estudiante a una carrera, se debe ejecuar el siguiente link y en el cuerpo de este, colocar el ID de estudiante y el ID de la carrera.
 
 ```
 POST: http://[IP]:[PORT]/enrollments
 ```
 
-Request:
+Body:
 
 ```json
 {   
@@ -204,7 +203,7 @@ Response:
 ```
 ## Pruebas de estres
 
-Para realizar pruebas de estes hay que ejecutar el siguiente comando con la aplicación andando.
+Para realizar pruebas de estres hay que ejecutar el siguiente comando con la aplicación funcionando.
 
 ````
 npm run loadtest
