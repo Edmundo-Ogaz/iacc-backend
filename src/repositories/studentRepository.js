@@ -35,7 +35,7 @@ async function findByRut(rut) {
     throw new BadRequest('BAD_REQUEST')
   }
   try {
-    const row = await db.get(`SELECT * FROM student WHERE rut = ${rut}`)
+    const row = await db.get(`SELECT * FROM student WHERE rut = '${rut}'`)
     console.debug("studentRepository findByRut response", row)
     return row;
   } catch(e) {

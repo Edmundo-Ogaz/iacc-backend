@@ -109,7 +109,7 @@ async function remove(req, res, next) {
 
     const objectById =  await enrollmentRepository.findByStudenId(id)
     if (Object.keys(objectById).length !== 0) {
-      throw new BadRequest('STUDENT_IS_ENROLLMENT')
+      throw new BadRequest('STUDENT_ENROLLMENTED')
     }
 
     const resp = await studentRepository.remove(id)
